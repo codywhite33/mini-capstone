@@ -17,7 +17,5 @@ class Product < ApplicationRecord
   def supplier
     Supplier.find_by(id: supplier_id)
   end
-  def image
-    Image.where(product_id: id)
-  end
+  has_many :images
 end
