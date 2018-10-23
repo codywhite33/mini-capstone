@@ -1,17 +1,23 @@
 class Product < ApplicationRecord
+  validates :price, presence: true
+  validates :price, numericality: { greater_than: 0 }
+  validates :name, uniqueness: true
+  validates :name, presence: true
+  validates :description, length: { in: 1..500 }
   def is_discounted?
-    x = false
-    if price < 10
-      x = true
-    end
-    return x
+    price < 10
   end
   def tax
-    tax = price.to_i * 0.09
-    return tax.round(3)
+    price * 0.09
   end
   def total
     final = price.to_i + tax
-    return '%.2f' % final
+    return final
+  end
+  def supplier
+    Supplier.find_by(id: supplier_id)
+  end
+  def image
+    Image.where(product_id: id)
   end
 end

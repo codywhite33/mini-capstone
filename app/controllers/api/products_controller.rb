@@ -1,35 +1,49 @@
 class Api::ProductsController < ApplicationController
 
   def index
-    @all_products = Product.all
-    render "products.json.jbuilder"
+    search = params[:search]
+    @all_products = Product.all.order(:id)
+    if search
+      @all_products = Product.where("name ilike ?", "%#{search}%")
+      @all_products = @all_products.order(:price)
+    end
+    
+    render "index.json.jbuilder"
   end
   def show
-    @item = Product.find_by(id: params[:id])
+    @product = Product.find_by(id: params[:id])
     render "show.json.jbuilder"
   end
   def create
-    @item = Product.new(
+    @product = Product.new(
       name: params["name"],
       price: params["price"],
       description: params["description"],
-      image_url: params["image_url"]
+      supplier_id: params["supplier_id"]
       )
-    @item.save
-    render "show.json.jbuilder"
+    if @product.save
+      render "show.json.jbuilder"
+    else 
+      render json: {error: @product.errors.full_messages}, status: 422
+    end
   end
   def update
-    @item = Product.find_by(id: params[:id])
-    @item.name = params["name"] || @item.name
-    @item.image_url = params["image_url"] || @item.image_url
-    @item.description = params["description"] || @item.description
-    @item.price = params["price"] || @item.price
-    @item.save
-    render "show.json.jbuilder"
+    @product = Product.find_by(id: params[:id])
+    @product.name = params["name"] || @product.name
+    @product.image_url = params["image_url"] || @product.image_url
+    @product.description = params["description"] || @product.description
+    @product.price = params["price"] || @product.price
+    @product.supplier_id = params["supplier_id"] || @product.supplier_id
+
+    if @product.save
+      render "show.json.jbuilder"
+    else 
+      render json: {error: @product.error.all_messages}, status: 422
+    end
   end
   def destroy
-    @item = Product.find_by(id: params[:id])
-    @item.destroy
+    @product = Product.find_by(id: params[:id])
+    @product.destroy
     render json: {terminal: "Product has been removed!"}
   end
 end

@@ -1,1 +1,0 @@
-json.controllers @all_products
