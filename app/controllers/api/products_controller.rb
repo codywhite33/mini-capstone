@@ -12,7 +12,9 @@ class Api::ProductsController < ApplicationController
   end
   def show
     @product = Product.find_by(id: params[:id])
+    @current_user = current_user
     render "show.json.jbuilder"
+
   end
   def create
     @product = Product.new(

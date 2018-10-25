@@ -7,3 +7,4 @@ json.supplier product.supplier
 json.discount product.is_discounted?
 json.tax product.tax
 json.total product.total
+json.user current_user
