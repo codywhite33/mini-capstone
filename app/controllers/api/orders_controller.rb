@@ -1,4 +1,5 @@
 class Api::OrdersController < ApplicationController
+  before_action :authenticate_user
   def create
     product = Product.find_by(id: params["product_id"])
 
@@ -16,9 +17,9 @@ class Api::OrdersController < ApplicationController
       render json: {error: @product.errors.full_messages}, status: 422
     end
   end
-  def show
-    @order = Order.where(user_id: params[:id])
-    render "order.json.jbuilder"
+  def index
+    @orders = current_user.orders
+    render "index.json.jbuilder"
 
   end
 end

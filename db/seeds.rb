@@ -7,5 +7,9 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 
+Category.create!(name: "Sixty-Four")
+Category.create!(name: "Everything else")
+
+
 
 
