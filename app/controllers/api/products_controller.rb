@@ -7,6 +7,10 @@ class Api::ProductsController < ApplicationController
       @all_products = Product.where("name ilike ?", "%#{search}%")
       @all_products = @all_products.order(:price)
     end
+    if params[:category]
+      category = Category.find_by(name: params[:category])
+      @all_products = category.products
+    end
     
     render "index.json.jbuilder"
   end

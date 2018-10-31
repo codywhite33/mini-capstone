@@ -18,6 +18,9 @@ class Product < ApplicationRecord
     Supplier.find_by(id: supplier_id)
   end
   has_many :images
-  has_many :orders
   has_many :category_products
+  has_many :categories, through: :category_products
+
+  has_many :carted_products
+  has_many :orders,  through: :carted_products
 end
